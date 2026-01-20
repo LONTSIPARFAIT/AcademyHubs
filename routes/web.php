@@ -16,4 +16,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 });
 
+// routes/web.php
+Route::get('/courses', function () {
+    return Inertia::render('Courses');
+})->name('courses');
+
 require __DIR__.'/settings.php';

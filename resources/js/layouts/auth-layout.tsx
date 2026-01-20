@@ -1,3 +1,4 @@
+// layouts/auth-layout.tsx
 import AuthLayoutTemplate from '@/layouts/auth/auth-split-layout';
 
 export default function AuthLayout({
