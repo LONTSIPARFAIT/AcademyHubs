@@ -24,6 +24,24 @@ export default function Welcome() {
     return () => clearInterval(interval);
   }, []);
 
+  // États pour les filtres
+  const [selectedFormation, setSelectedFormation] = useState('Toutes');
+  const [selectedLevel, setSelectedLevel] = useState('Tous');
+
+  // Formations disponibles
+  const formations = [
+    'Toutes',
+    'Développement Web Fullstack',
+    'Laravel & Backend',
+    'React & Next.js',
+    'UI/UX Design',
+    'DevOps & Cloud',
+    'Mobile React Native'
+  ];
+
+  // Niveaux disponibles
+  const niveaux = ['Tous', 'Débutant', 'Intermédiaire', 'Avancé'];
+
   const courses = [
     {
       title: 'Développement Web Fullstack',
@@ -35,7 +53,8 @@ export default function Welcome() {
       rating: 4.8,
       instructor: 'Jean Dupont',
       img: 'https://images.unsplash.com/photo-1581287053822-fd7bf4f4d0f5?auto=format&fit=crop&w=800&q=80',
-      tags: ['Frontend', 'Backend', 'Projet']
+      tags: ['Frontend', 'Backend', 'Projet'],
+      formation: 'Développement Web Fullstack'
     },
     {
       title: 'Laravel & Développement Backend',
@@ -47,7 +66,8 @@ export default function Welcome() {
       rating: 4.9,
       instructor: 'Marie Kamga',
       img: 'https://images.unsplash.com/photo-1555066931-bf19c0fd1085?auto=format&fit=crop&w=800&q=80',
-      tags: ['Backend', 'API', 'Base de données']
+      tags: ['Backend', 'API', 'Base de données'],
+      formation: 'Laravel & Backend'
     },
     {
       title: 'React & Next.js Avancé',
@@ -59,7 +79,8 @@ export default function Welcome() {
       rating: 4.7,
       instructor: 'Samuel Nkono',
       img: 'https://images.unsplash.com/photo-1633356122542-727a01e23861?auto=format&fit=crop&w=800&q=80',
-      tags: ['React', 'TypeScript', 'Next.js']
+      tags: ['React', 'TypeScript', 'Next.js'],
+      formation: 'React & Next.js'
     },
     {
       title: 'UI/UX Design pour Débutants',
@@ -71,7 +92,8 @@ export default function Welcome() {
       rating: 4.6,
       instructor: 'Sarah Mbala',
       img: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=800&q=80',
-      tags: ['Design', 'Figma', 'Prototype']
+      tags: ['Design', 'Figma', 'Prototype'],
+      formation: 'UI/UX Design'
     },
     {
       title: 'DevOps & Déploiement Cloud',
@@ -83,7 +105,8 @@ export default function Welcome() {
       rating: 4.8,
       instructor: 'Paul Owono',
       img: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80',
-      tags: ['DevOps', 'Cloud', 'Docker']
+      tags: ['DevOps', 'Cloud', 'Docker'],
+      formation: 'DevOps & Cloud'
     },
     {
       title: 'Mobile avec React Native',
@@ -95,9 +118,62 @@ export default function Welcome() {
       rating: 4.5,
       instructor: 'Lisa Ndifor',
       img: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80',
-      tags: ['Mobile', 'React Native', 'iOS/Android']
+      tags: ['Mobile', 'React Native', 'iOS/Android'],
+      formation: 'Mobile React Native'
+    },
+    {
+      title: 'HTML & CSS Fondamentaux',
+      desc: 'Apprenez les bases du développement web avec HTML5 et CSS3.',
+      level: 'Débutant',
+      duration: '4 semaines',
+      lessons: 20,
+      students: 510,
+      rating: 4.7,
+      instructor: 'Jean Dupont',
+      img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80',
+      tags: ['HTML', 'CSS', 'Responsive'],
+      formation: 'Développement Web Fullstack'
+    },
+    {
+      title: 'JavaScript Moderne',
+      desc: 'Maîtrisez JavaScript ES6+, les APIs modernes et les concepts avancés.',
+      level: 'Intermédiaire',
+      duration: '8 semaines',
+      lessons: 30,
+      students: 380,
+      rating: 4.8,
+      instructor: 'Jean Dupont',
+      img: 'https://images.unsplash.com/photo-1627398242454-45a1465c2479?auto=format&fit=crop&w=800&q=80',
+      tags: ['JavaScript', 'ES6+', 'Async'],
+      formation: 'Développement Web Fullstack'
+    },
+    {
+      title: 'Figma Avancé',
+      desc: 'Créez des prototypes interactifs et des design systems professionnels.',
+      level: 'Avancé',
+      duration: '5 semaines',
+      lessons: 18,
+      students: 120,
+      rating: 4.9,
+      instructor: 'Sarah Mbala',
+      img: 'https://images.unsplash.com/photo-1551650975-87deedd944c3?auto=format&fit=crop&w=800&q=80',
+      tags: ['Figma', 'Prototype', 'Design System'],
+      formation: 'UI/UX Design'
     }
   ];
+
+  // Filtrer les cours
+  const filteredCourses = courses.filter(course => {
+    const matchesFormation = selectedFormation === 'Toutes' || course.formation === selectedFormation;
+    const matchesLevel = selectedLevel === 'Tous' || course.level === selectedLevel;
+    return matchesFormation && matchesLevel;
+  });
+
+  // Réinitialiser les filtres
+  const resetFilters = () => {
+    setSelectedFormation('Toutes');
+    setSelectedLevel('Tous');
+  };
 
   const learningPaths = [
     {
@@ -308,103 +384,224 @@ export default function Welcome() {
           </div>
         </section>
 
-        {/* Catalogue des cours - REDIMENSIONNÉ */}
+        {/* Catalogue des cours - MODIFIÉ AVEC FILTRES */}
         <section className="py-12 md:py-16 lg:py-20 bg-gray-50 dark:bg-gray-950">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-10 md:mb-12">
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-4">
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
-                  Notre Catalogue de Cours
+                  Nos Cours par Formation
                 </span>
               </h2>
               <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                Des formations pratiques et complètes pour tous les niveaux
+                Explorez nos cours organisés par formation. Utilisez les filtres pour affiner votre recherche.
               </p>
             </div>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-              {courses.map((course, i) => (
-                <div
-                  key={i}
-                  className="group bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700"
-                >
-                  <div className="relative h-40 sm:h-48 overflow-hidden">
-                    <img
-                      src={course.img}
-                      alt={course.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute top-3 left-3">
-                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                        course.level === 'Débutant' ? 'bg-green-100 text-green-800' :
-                        course.level === 'Intermédiaire' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-red-100 text-red-800'
-                      }`}>
-                        {course.level}
-                      </span>
+            {/* Filtres */}
+            <div className="mb-8 md:mb-10 bg-white dark:bg-gray-800 rounded-xl p-4 md:p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                  <h3 className="font-bold text-lg mb-2">Filtrer les cours</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {filteredCourses.length} cours trouvés
+                  </p>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4">
+                  {/* Filtre Formation */}
+                  <div className="w-full sm:w-auto">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Formation
+                    </label>
+                    <div className="relative">
+                      <select
+                        value={selectedFormation}
+                        onChange={(e) => setSelectedFormation(e.target.value)}
+                        className="w-full sm:w-64 px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none cursor-pointer"
+                      >
+                        {formations.map((formation, index) => (
+                          <option key={index} value={formation}>
+                            {formation}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                        <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
                     </div>
                   </div>
-                  
-                  <div className="p-4 sm:p-5">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-1">
-                        <div className="flex text-yellow-400">
-                          {[...Array(5)].map((_, j) => (
-                            <div key={j} className={j < Math.floor(course.rating) ? 'text-yellow-400' : 'text-gray-300 dark:text-gray-600'}>
-                              ★
-                            </div>
-                          ))}
-                        </div>
-                        <span className="text-sm font-medium ml-1">{course.rating}</span>
-                      </div>
-                      <span className="text-xs text-gray-500">{course.students} étudiants</span>
-                    </div>
 
-                    <h3 className="text-lg font-bold mb-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                      {course.title}
-                    </h3>
-                    
-                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">
-                      {course.desc}
-                    </p>
-
-                    <div className="flex flex-wrap gap-1 mb-4">
-                      {course.tags.map((tag, j) => (
-                        <span key={j} className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded-full">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-
-                    <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-700">
-                      <div className="flex items-center gap-2">
-                        <div className="w-7 h-7 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
-                          <span className="text-indigo-600 dark:text-indigo-400 font-bold text-xs">
-                            {course.instructor.split(' ').map(n => n[0]).join('')}
-                          </span>
-                        </div>
-                        <span className="text-xs text-gray-600 dark:text-gray-400">{course.instructor}</span>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-xs text-gray-500">{course.duration} • {course.lessons} leçons</div>
+                  {/* Filtre Niveau */}
+                  <div className="w-full sm:w-auto">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Niveau
+                    </label>
+                    <div className="relative">
+                      <select
+                        value={selectedLevel}
+                        onChange={(e) => setSelectedLevel(e.target.value)}
+                        className="w-full sm:w-48 px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none cursor-pointer"
+                      >
+                        {niveaux.map((niveau, index) => (
+                          <option key={index} value={niveau}>
+                            {niveau}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                        <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                        </svg>
                       </div>
                     </div>
                   </div>
                 </div>
-              ))}
+              </div>
+
+              {/* Boutons d'action filtres */}
+              <div className="flex items-center justify-between mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                  </svg>
+                  <span>
+                    Filtres actifs: {selectedFormation !== 'Toutes' && 'Formation'} {selectedLevel !== 'Tous' && 'Niveau'}
+                  </span>
+                </div>
+                
+                {(selectedFormation !== 'Toutes' || selectedLevel !== 'Tous') && (
+                  <button
+                    onClick={resetFilters}
+                    className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    Réinitialiser les filtres
+                  </button>
+                )}
+              </div>
             </div>
 
-            <div className="text-center">
-              <Link
-                href="/courses"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-xl font-bold text-base shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-              >
-                Voir tous les cours
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-            </div>
+            {/* Liste des cours filtrés */}
+            {filteredCourses.length > 0 ? (
+              <>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+                  {filteredCourses.map((course, i) => (
+                    <div
+                      key={i}
+                      className="group bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:border-indigo-500"
+                    >
+                      <div className="relative h-40 sm:h-48 overflow-hidden">
+                        <img
+                          src={course.img}
+                          alt={course.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <div className="absolute top-3 left-3">
+                          <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                            course.level === 'Débutant' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100' :
+                            course.level === 'Intermédiaire' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100' :
+                            'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100'
+                          }`}>
+                            {course.level}
+                          </span>
+                        </div>
+                        <div className="absolute top-3 right-3">
+                          <span className="px-2 py-1 bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 text-xs font-semibold rounded-full">
+                            {course.formation.split(' ')[0]}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <div className="p-4 sm:p-5">
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center gap-1">
+                            <div className="flex text-yellow-400">
+                              {[...Array(5)].map((_, j) => (
+                                <div key={j} className={j < Math.floor(course.rating) ? 'text-yellow-400' : 'text-gray-300 dark:text-gray-600'}>
+                                  ★
+                                </div>
+                              ))}
+                            </div>
+                            <span className="text-sm font-medium ml-1">{course.rating}</span>
+                          </div>
+                          <span className="text-xs text-gray-500">{course.students} étudiants</span>
+                        </div>
+
+                        <h3 className="text-lg font-bold mb-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-2">
+                          {course.title}
+                        </h3>
+                        
+                        <p className="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">
+                          {course.desc}
+                        </p>
+
+                        <div className="flex flex-wrap gap-1 mb-4">
+                          {course.tags.map((tag, j) => (
+                            <span key={j} className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded-full">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+
+                        <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-700">
+                          <div className="flex items-center gap-2">
+                            <div className="w-7 h-7 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
+                              <span className="text-indigo-600 dark:text-indigo-400 font-bold text-xs">
+                                {course.instructor.split(' ').map(n => n[0]).join('')}
+                              </span>
+                            </div>
+                            <span className="text-xs text-gray-600 dark:text-gray-400">{course.instructor}</span>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-xs text-gray-500">{course.duration} • {course.lessons} leçons</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="text-center">
+                  <Link
+                    href="/courses"
+                    className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-xl font-bold text-base shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                  >
+                    Voir tous les cours
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+                <div className="text-gray-400 dark:text-gray-500 mb-4">
+                  <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-700 dark:text-gray-300 mb-2">
+                  Aucun cours trouvé
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
+                  Aucun cours ne correspond à vos critères de filtrage. Essayez de modifier vos filtres.
+                </p>
+                <button
+                  onClick={resetFilters}
+                  className="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition-colors duration-200"
+                >
+                  Réinitialiser les filtres
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                </button>
+              </div>
+            )}
           </div>
         </section>
 
